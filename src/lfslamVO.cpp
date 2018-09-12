@@ -267,6 +267,8 @@ int main( int argc, char** argv )
     cout<<"t = "<<t<<endl;
     cout<<"R_inv = "<<R.t() <<endl;
     cout<<"t_inv = "<<-R.t() *t<<endl;
+    //////////
+
     ///////////// SVD ICP edit by jdy 20180816
 #endif
     return 0;
