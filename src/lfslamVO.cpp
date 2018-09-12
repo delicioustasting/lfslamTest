@@ -268,7 +268,35 @@ int main( int argc, char** argv )
     cout<<"R_inv = "<<R.t() <<endl;
     cout<<"t_inv = "<<-R.t() *t<<endl;
     //////////
+    for (int i = 0; i < pointCloud2->size(); ++i)
+    {
+    	PointT p1_temp = pointCloud2->at(i);
+    	PointT p2_temp;
+    	cv::Mat p1_tempCV = cv::Mat::zeros(3,1,CV_64FC1);
+    	cv::Mat p2_tempCV = cv::Mat::zeros(3,1,CV_64FC1);
+    	cv::Mat R2 = cv::Mat::zeros(3,3,CV_64FC1);
 
+
+    	p1_tempCV.at<double>(0,0) = p1_temp.x;
+    	p1_tempCV.at<double>(1,0) = p1_temp.y;
+    	p1_tempCV.at<double>(2,0) = p1_temp.z;
+    	p2_tempCV = R*p1_tempCV + t;
+    	//p2_tempCV = cv::invert(R, R2)*(p1_tempCV - t);
+
+
+    	p2_temp.x = p2_tempCV.at<double>(0,0);
+    	p2_temp.y = p2_tempCV.at<double>(1,0);
+    	p2_temp.z = p2_tempCV.at<double>(2,0);
+
+    	p2_temp.r = p1_temp.r;
+    	p2_temp.g = p1_temp.g;
+    	p2_temp.b = p1_temp.b;
+    	// 把p加入到点云中
+    	pointCloud->points.push_back( p2_temp );
+
+    }
+    pcl::io::savePCDFileBinary(
+          		"/home/jdy/project/pointXYZRGB/data/B03/pcloud_total.pcd", *pointCloud);
     ///////////// SVD ICP edit by jdy 20180816
 #endif
     return 0;
